@@ -24,7 +24,7 @@ namespace SqlCompiler.RegexLexer
             return AddLexerWord(re, token, false);
         }
 
-        public List<Word> AddUniversalNewline(string token)
+        public List<Word> AddNewlineDelilms(string token)
         {
             var ret = new List<Word>();
             ret.Add(AddDelim(@"\r\n", token).NewLine());
