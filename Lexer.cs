@@ -9,32 +9,32 @@ namespace SqlCompiler.RegexLexer
 {
     public class Lexer
     {
-        private readonly Dictionary<string, LexerState> definedStates = new Dictionary<string, LexerState>();
+        private readonly Dictionary<string, State> definedStates = new Dictionary<string, State>();
 
-        public LexerState State(string stateName)
+        public State State(string stateName)
         {
             if (!definedStates.ContainsKey(stateName))
             {
-                definedStates.Add(stateName, new LexerState(this, stateName));
+                definedStates.Add(stateName, new State(this, stateName));
             }
             return definedStates[stateName];
         }
 
-        public List<LexerToken> Lex(string content)
+        public IEnumerable<Token> Lex(string content)
         {
             uint lineNum = 1;
             uint charNum = 1;
             List<SyntaxException> foundExceptions = new List<SyntaxException>();
-            List<LexerToken> tokens = new List<LexerToken>();
+            List<Token> tokens = new List<Token>();
             Scanner scanner = new Scanner(content);
-            Stack<LexerState> state = new Stack<LexerState>();
+            Stack<State> state = new Stack<State>();
 
             // Start off in the default state.
             state.Push(State("default"));
             do
             {
                 // Create token
-                LexerWord lexData;
+                Word lexData;
                 string match;
                 try
                 {
@@ -45,7 +45,7 @@ namespace SqlCompiler.RegexLexer
                     foundExceptions.Add(e);
                     continue;
                 }
-                tokens.Add(new LexerToken(lexData.token,
+                tokens.Add(new Token(lexData.token,
                                           match, lineNum, charNum));
                 
                 // Handle State
@@ -77,7 +77,7 @@ namespace SqlCompiler.RegexLexer
             return tokens;
         }
 
-        private (LexerWord, string) ReadMatch(Scanner scanner, LexerState state)
+        private (Word, string) ReadMatch(Scanner scanner, State state)
         {
             var word = scanner.ReadNextWordOrDelim(state.GetDelims().Cast<Regex>());
             var (lexData, regexMatch) =
