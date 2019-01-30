@@ -86,10 +86,12 @@ namespace SqlCompiler.RegexLexer
                      .OrderByDescending(m => m.Item1.isDelim)
                      .ThenByDescending(m => m.Item2.Length)
                      .FirstOrDefault();
-            if (regexMatch == null)
+
+            string invalid = word.Substring(regexMatch?.Length ?? 0);
+            if (!String.IsNullOrEmpty(invalid))
             {
                 throw new SyntaxException(
-                    $"\"{word}\" is not valid in the \"{state.stateName}\" state."
+                    $"\"{invalid}\" is not a valid token in the \"{state.stateName}\" state."
                 );
             }
 
