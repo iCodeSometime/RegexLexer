@@ -103,7 +103,6 @@ namespace SqlCompiler.RegexLexer
         public SyntaxException() : base() { }
         public SyntaxException(string message) : base(message) { }
     }
-
 }
 
 
