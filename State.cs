@@ -33,7 +33,7 @@ namespace SqlCompiler.RegexLexer
             return ret;
         }
 
-        public List<Word> GetDelims()
+        public IEnumerable<Word> GetDelims()
         {
             return matches.Where(m => m.isDelim).ToList();
         }
