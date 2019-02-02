@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace SqlCompiler.RegexLexer
 {
     public class State
     {
-        internal readonly List<Word> matches = new List<Word>();
+        internal readonly WordList words = new WordList();
         private readonly Lexer parent;
         public readonly string stateName;
         public State(Lexer parent, string stateName)
@@ -17,31 +18,31 @@ namespace SqlCompiler.RegexLexer
 
         public Word AddDelim(string re, string token)
         {
-            return AddLexerWord(re, token, true);
+            return AddWord(re, token, true);
         }
-        public Word AddWord(string re, string token)
+        public Word AddNonDelim(string re, string token)
         {
-            return AddLexerWord(re, token, false);
+            return AddWord(re, token, false);
         }
 
-        public List<Word> AddNewlineDelilms(string token)
+        public WordList AddNewlineDelilms(string token)
         {
-            var ret = new List<Word>();
-            ret.Add(AddDelim(@"\r\n", token).NewLine());
-            ret.Add(AddDelim(@"\n", token).NewLine());
-            ret.Add(AddDelim(@"\r", token).NewLine());
-            return ret;
+            var words = new WordList();
+            words.Add(AddDelim(@"\r\n", token).NewLine());
+            words.Add(AddDelim(@"\n", token).NewLine());
+            words.Add(AddDelim(@"\r", token).NewLine());
+            return words;
         }
 
-        public IEnumerable<Word> GetDelims()
+        public WordList GetDelims()
         {
-            return matches.Where(m => m.isDelim).ToList();
+            return words.GetDelims();
         }
 
-        private Word AddLexerWord(string re, string token, bool isDelim)
+        private Word AddWord(string re, string token, bool isDelim)
         {
             Word match = new Word(parent, re, token, isDelim);
-            matches.Add(match);
+            words.Add(match);
             return match;
         }
 

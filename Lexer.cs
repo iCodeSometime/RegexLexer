@@ -28,6 +28,7 @@ namespace SqlCompiler.RegexLexer
             List<Token> tokens = new List<Token>();
             Scanner scanner = new Scanner(content);
             Stack<State> state = new Stack<State>();
+            string match = "";
 
             // Start off in the default state.
             state.Push(State("default"));
@@ -35,7 +36,6 @@ namespace SqlCompiler.RegexLexer
             {
                 // Create token
                 Word lexData;
-                string match;
                 try
                 {
                     (lexData, match) = ReadMatch(scanner, state.Peek());
@@ -45,6 +45,7 @@ namespace SqlCompiler.RegexLexer
                     foundExceptions.Add(e);
                     continue;
                 }
+                if (match == null) break;
                 tokens.Add(new Token(lexData.token,
                                           match, lineNum, charNum));
                 
@@ -68,7 +69,7 @@ namespace SqlCompiler.RegexLexer
                 {
                     charNum += (uint)match.Length;
                 }
-            } while (scanner.Peek() != -1);
+            } while (match != null);
 
             if (foundExceptions.Count > 0)
             {
@@ -79,13 +80,10 @@ namespace SqlCompiler.RegexLexer
 
         private (Word, string) ReadMatch(Scanner scanner, State state)
         {
-            var word = scanner.ReadNextWordOrDelim(state.GetDelims().Cast<Regex>());
-            var (lexData, regexMatch) =
-                state.matches.Select(lm => (lm, lm.Match(word)))
-                     .Where(m => m.Item2.Success)
-                     .OrderByDescending(m => m.Item1.isDelim)
-                     .ThenByDescending(m => m.Item2.Length)
-                     .FirstOrDefault();
+            var word = scanner.Read(state.GetDelims() as DelimiterCollection<Word>);
+
+            if (word == null) return (null, null);
+            var (lexData, regexMatch) = state.words.WordMatch(word);
 
             string invalid = word.Substring(regexMatch?.Length ?? 0);
             if (!String.IsNullOrEmpty(invalid))
