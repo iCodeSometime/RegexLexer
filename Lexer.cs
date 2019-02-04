@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
 
 using SqlCompiler.StringScanner;
@@ -9,15 +10,11 @@ namespace SqlCompiler.RegexLexer
 {
     public class Lexer
     {
-        private readonly Dictionary<string, State> definedStates = new Dictionary<string, State>();
+        private readonly ConcurrentDictionary<string, State> definedStates = new ConcurrentDictionary<string, State>();
 
         public State State(string stateName)
         {
-            if (!definedStates.ContainsKey(stateName))
-            {
-                definedStates.Add(stateName, new State(this, stateName));
-            }
-            return definedStates[stateName];
+            return definedStates.GetOrAdd(stateName, new State(this, stateName));
         }
 
         public IEnumerable<Token> Lex(string content)
