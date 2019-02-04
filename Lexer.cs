@@ -102,13 +102,3 @@ namespace SqlCompiler.RegexLexer
         public SyntaxException(string message) : base(message) { }
     }
 }
-
-
-
-//test.State("default").AddDelim("/\*", 'block_comment_start').PushState("block_comment");
-//test.State("block_comment").AddWord("\.\*", 'comment_body');
-//test.State("block_comment").AddDelim("\*/").PopState();
-//test.State("default").AddDelim("'", "begin_string").PushState("string");
-//test.State("string").AddWord(".*", "string_body")
-//test.State("string").AddDelim("'", "end_string").PopState()
-//test.State("default").MatchWord("f");
