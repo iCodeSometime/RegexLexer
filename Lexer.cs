@@ -21,8 +21,8 @@ namespace SqlCompiler.RegexLexer
         public IEnumerable<Token> Lex(string content)
         {
             StateContainer state = new StateContainer();
-            Token token;
             Scanner scanner = new Scanner(content);
+            Token token;
 
             // Start off in the default state.
             state.Push(State("default"));
@@ -34,7 +34,7 @@ namespace SqlCompiler.RegexLexer
 
         private Token ReadToken(Scanner scanner, StateContainer state)
         {
-            var word = scanner.Read(state.GetDelims() as DelimiterCollection<Word>);
+            string word = scanner.Read(state.GetDelims() as DelimiterCollection<Word>);
             if (word == null) return null;
 
             var (lexData, regexMatch) = state.words.WordMatch(word);
@@ -47,9 +47,7 @@ namespace SqlCompiler.RegexLexer
             }
 
             Token ret = new Token(lexData.token, regexMatch.Value, state.LineNum, state.CharNum);
-
             ProcessState(lexData, regexMatch.Value, state);
-
             return ret;
         }
 
@@ -63,7 +61,10 @@ namespace SqlCompiler.RegexLexer
             {
                 state.Push(word.pushState);
             }
-            if (word.isNewLine) state.NewLine();
+            if (word.isNewLine)
+            {
+                state.NewLine();
+            }
             else
             {
                 state.IncrementChar(match.Length);
