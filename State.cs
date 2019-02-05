@@ -9,11 +9,12 @@ namespace SqlCompiler.RegexLexer
     {
         internal readonly WordList words = new WordList();
         private readonly Lexer parent;
-        public readonly string stateName;
+        public readonly string name;
+
         public State(Lexer parent, string stateName)
         {
             this.parent = parent;
-            this.stateName = stateName;
+            this.name = stateName;
         }
 
         public Word AddDelim(string re, string token)
@@ -45,6 +46,35 @@ namespace SqlCompiler.RegexLexer
             words.Add(match);
             return match;
         }
+    }
+    public class StateContainer : Stack<State>
+    {
+        public uint LineNum { get; private set; }
+        public uint CharNum { get; private set; }
+        public StateContainer()
+        {
+            LineNum = 1;
+            CharNum = 1;
+        }
 
+        public void NewLine()
+        {
+            LineNum++;
+            CharNum = 1;
+        }
+        public void IncrementChar(uint count)
+        {
+            CharNum += count;
+        }
+
+        public void IncrementChar(int count)
+        {
+            IncrementChar((uint)count);
+        }
+        #region proxying
+        public WordList GetDelims() => Peek().GetDelims();
+        public WordList words => Peek().words;
+        public string name => Peek().name;
+        #endregion
     }
 }
