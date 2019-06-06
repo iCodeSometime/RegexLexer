@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SqlCompiler.RegexLexer
+namespace RegexLexer
 {
     public class Token
     {

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
 
-using SqlCompiler.StringScanner;
+using StringScanner;
 
-namespace SqlCompiler.RegexLexer
+namespace RegexLexer
 {
     public class Lexer
     {

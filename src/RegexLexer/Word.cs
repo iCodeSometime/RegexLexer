@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using SqlCompiler.StringScanner;
+using StringScanner;
 using System.Collections.Generic;
 
-namespace SqlCompiler.RegexLexer
+namespace RegexLexer
 {
     public class Word : Regex, IDelimiter
     {

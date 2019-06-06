@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SqlCompiler.RegexLexer
+namespace RegexLexer
 {
     public class State
     {

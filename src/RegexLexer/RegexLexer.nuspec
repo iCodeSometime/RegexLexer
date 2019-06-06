@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>RegexLexer</id>
+    <version>0.0.1</version>
+    <authors>iCodeSometime</authors>
+    <owners>iCodeSometime</owners>
+    <license type="expression">LGPL-3.0-or-later</license>
+    <projectUrl>https://github.com/iCodeSometime/RegexLexer</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>RegexLexer splits a string into a stream of tokens based on given regex patterns.</description>
+    <copyright>Copyright 2019, Kenneth Cochran.</copyright>
+    <tags>String Scan Scanner StringScanner Regex Delimiter Word Split Read Parse Lex Text RegexLexer Lexer LexingEngine Lexing Library</tags>
+    <packageTypes>
+      <packageType name="Dependency" />
+    </packageTypes>
+  </metadata>
+</package>
